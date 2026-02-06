@@ -1,0 +1,24 @@
+Architecture v1:
+
+.
+├── app/
+│   ├── main.py              # FastAPI entrypoint
+│   ├── agent/
+│   │   ├── agent.py         # AI Agent core
+│   │   ├── memory.py        # Simple memory (in-memory / file)
+│   │   └── planner.py       # Task planning
+│   ├── tools/
+│   │   ├── base.py          # Tool interface (MCP-like)
+│   │   ├── file_tool.py
+│   │   └── math_tool.py
+│   ├── api/
+│   │   └── routes.py
+│   └── config.py
+├── tests/
+├── Dockerfile
+├── pyproject.toml
+└── .github/workflows/ci.yml
+
+
+
+What is AI Agent
