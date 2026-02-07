@@ -1,23 +1,33 @@
 Architecture v1:
 
-.
+ai-agent-mcp-server/
 ├── app/
-│   ├── main.py              # FastAPI entrypoint
+│   ├── __init__.py
+│   ├── main.py
+│   ├── config.py
+│   │
 │   ├── agent/
-│   │   ├── agent.py         # AI Agent core
-│   │   ├── memory.py        # Simple memory (in-memory / file)
-│   │   └── planner.py       # Task planning
+│   │   ├── __init__.py
+│   │   ├── agent.py
+│   │   ├── memory.py
+│   │   └── planner.py
+│   │
 │   ├── tools/
-│   │   ├── base.py          # Tool interface (MCP-like)
+│   │   ├── __init__.py
+│   │   ├── base.py
 │   │   ├── file_tool.py
 │   │   └── math_tool.py
-│   ├── api/
-│   │   └── routes.py
-│   └── config.py
+│   │
+│   └── api/
+│       ├── __init__.py
+│       └── routes.py
+│
 ├── tests/
-├── Dockerfile
-├── pyproject.toml
-└── .github/workflows/ci.yml
+│   └── __init__.py
+│
+├── .gitignore
+└── README.md
+
 
 
 
