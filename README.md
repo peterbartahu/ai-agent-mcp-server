@@ -1,8 +1,25 @@
 # AI Agent MCP Server
 
-Experimental AI Agent backend built with Python and FastAPI.
+This project is a Python-based MCP-style AI agent backend,
+focused on clean architecture, tool-based execution,
+and testable agent logic.
 
+At the moment, the agent is deterministic and does not use a real LLM.
+This is intentional: the focus is on architecture, not prompt engineering.
 ## Goals
-- MCP-style tool execution
-- Clean architecture
-- AI agent experimentation
+- Agent-based reasoning
+- MCP-inspired tool execution
+- Clean / Hexagonal Architecture
+- Fully testable core logic
+- Future FastAPI and LLM integration
+
+
+## Running the application
+```bash
+python -m app.main
+```
+
+## Running tests
+```bash
+pytest
+```
