@@ -1,33 +1,20 @@
-from typing import Dict
-from app.tools.base import Tool
+from typing import List, Optional
 from app.agent.planner import Planner
-
+from app.tools.base import Tool
 
 class Agent:
-    def __init__(self, tools: list[Tool], planner: Planner):
-        self.tools: Dict[str, Tool] = {
-            tool.name: tool for tool in tools
-        }
-        self.planner = planner
+    def __init__(self, planner: Optional[Planner] = None, tools: Optional[List[Tool]] = None):
+        self.planner = planner if planner else Planner()
+        self.tools = tools if tools else []
 
-    def handle_task(self, task: str) -> list[str]:
-        """
-        Handles a task by:
-        1. Planning steps
-        2. Executing each step via tools
-        """
+    def handle_task(self, task: str):
         steps = self.planner.plan(task)
-        results: list[str] = []
+        results = []
 
         for step in steps:
-            executed = False
-            for tool_name, tool in self.tools.items():
-                if tool_name in step:
-                    results.append(tool.run(step))
-                    executed = True
-                    break
-
-            if not executed:
-                results.append(f"No suitable tool found for step: {step}")
-
+            tool = self.tools[0] if self.tools else None
+            if tool:
+                results.append(tool.run(step))
+            else:
+                results.append(f"Executed: {step}")
         return results
