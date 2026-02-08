@@ -4,7 +4,7 @@ set -e
 
 BRANCH_NAME="$1"
 
-echo "🔍 Validating branch name: $BRANCH_NAME"
+echo "🔍 $USER Started validating branch name: $BRANCH_NAME"
 
 if [[ "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|subtask)/ ]]; then
   echo "📌 Ticket-based branch detected"
