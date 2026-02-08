@@ -7,38 +7,16 @@ on:
       - main
 
 jobs:
-  branch-policy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validate branch name
-        run: |
-          BRANCH_NAME="${{ github.head_ref }}"
-          echo "Checking branch name: $BRANCH_NAME"
-
-          if [[ "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|subtask)/ ]]; then
-            echo "Ticket-based branch detected, validating naming convention..."
-
-            if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|subtask)/[0-9]+-.*$ ]]; then
-              echo "❌ Invalid branch name!"
-              echo "Expected format:"
-              echo "  feature/000-description"
-              echo "  bugfix/000-description"
-              echo "  hotfix/000-description"
-              echo "  subtask/000-description"
-              exit 1
-            fi
-
-            echo "✅ Branch name is valid"
-          else
-            echo "Non ticket-based branch detected, skipping validation"
-          fi
-
   test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Validate branch name
+        run: |
+          ./scripts/validate_branch_name.sh "${{ github.head_ref }}"
 
       - name: Set up Python
         uses: actions/setup-python@v5
