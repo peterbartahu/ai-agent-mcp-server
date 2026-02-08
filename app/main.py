@@ -1,21 +1,7 @@
-from app.agent.agent import Agent
-from app.agent.planner import Planner
-from app.tools.file_tool import FileTool
-from app.tools.math_tool import MathTool
+from fastapi import FastAPI
 
+from app.api.agent import router as agent_router
 
-def main():
-    agent = Agent(
-        tools=[FileTool(), MathTool()],
-        planner=Planner()
-    )
+app = FastAPI(title="AI Agent MCP Server")
 
-    task = "use file_tool to read data then use math_tool to process numbers"
-    results = agent.handle_task(task)
-
-    for result in results:
-        print(result)
-
-
-if __name__ == "__main__":
-    main()
+app.include_router(agent_router)
