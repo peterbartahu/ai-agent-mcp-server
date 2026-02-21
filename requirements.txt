@@ -1,3 +1,5 @@
 fastapi
 uvicorn
 pytest
+openai
+python-dotenv

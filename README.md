@@ -13,6 +13,7 @@ This is intentional: the focus is on architecture, not prompt engineering.
 - Fully testable core logic
 - Future FastAPI and LLM integration
 
+source venv/bin/activate
 
 ## Running the application
 ```bash
