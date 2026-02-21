@@ -28,7 +28,23 @@ ai-agent-mcp-server/
 ├── .gitignore
 └── README.md
 
-
+aws-study-agent/
+│
+├── main.py                # FastAPI bootstrap, API endpoint
+├── agent.py               # Agent logika (Planner + Tool orchestration)
+├── planner.py             # Planner, ami lépésekre bontja a feladatot
+├── tools/
+│   ├── base.py            # Tool interface
+│   ├── question_generator.py
+│   ├── summary_generator.py
+│   ├── answer_provider.py
+│   └── pdf_exporter.py
+├── models/
+│   └── schemas.py         # Pydantic request/response modellek
+├── utils/
+│   └── text_chunking.py   # Chunking helper, opcionális
+├── requirements.txt
+└── README.md
 
 
 What is AI Agent
