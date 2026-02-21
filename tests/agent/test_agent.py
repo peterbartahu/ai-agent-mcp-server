@@ -1,26 +1,27 @@
 from app.agent.agent import Agent
 from app.agent.planner import Planner
-from app.tools.base import Tool
+from app.agent.llm import FakeLLM
+from app.tools.summary_tool import SummaryTool
+from app.tools.question_tool import QuestionTool
+from app.tools.answer_tool import AnswerTool
 
+def test_agent_runs_full_flow():
+    llm = FakeLLM()
 
-class DummyTool(Tool):
-    name = "dummy"
-    description = "Dummy tool"
+    tools = {
+        "summary": SummaryTool(llm),
+        "questions": QuestionTool(llm),
+        "answers": AnswerTool(llm),
+    }
 
-    def run(self, input_data: str) -> str:
-        return f"executed: {input_data}"
-
-
-def test_agent_executes_multiple_steps():
     agent = Agent(
-        tools=[DummyTool()],
-        planner=Planner()
+        planner=Planner(),
+        tools=tools
     )
 
-    task = "use dummy then use dummy again"
-    results = agent.handle_task(task)
+    result = agent.handle_task("AWS S3")
 
-    assert results == [
-        "executed: use dummy",
-        "executed: use dummy again"
-    ]
+    assert "summary" in result
+    assert "key_points" in result
+    assert "questions" in result
+    assert "answers" in result

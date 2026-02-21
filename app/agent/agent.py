@@ -1,20 +1,14 @@
-from typing import List, Optional
-from app.agent.planner import Planner
-from app.tools.base import Tool
-
 class Agent:
-    def __init__(self, planner: Optional[Planner] = None, tools: Optional[List[Tool]] = None):
-        self.planner = planner if planner else Planner()
-        self.tools = tools if tools else []
+    def __init__(self, planner, tools: dict):
+        self.planner = planner
+        self.tools = tools
 
-    def handle_task(self, task: str):
-        steps = self.planner.plan(task)
-        results = []
+    def handle_task(self, topic: str) -> dict:
+        context = {"topic": topic}
 
-        for step in steps:
-            tool = self.tools[0] if self.tools else None
-            if tool:
-                results.append(tool.run(step))
-            else:
-                results.append(f"Executed: {step}")
-        return results
+        for step in self.planner.plan():
+            tool = self.tools[step]
+            result = tool.run(context)
+            context.update(result)
+
+        return context
