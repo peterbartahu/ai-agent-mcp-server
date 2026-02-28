@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "ai-agent-study-helper"
+version = "0.1.0"
+description = "AI Study Helper Agent for generating summaries and questions from study topics"
+authors = ["Peter Barta"]
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openai = "^1.12.0"
+python-dotenv = "^1.0.1"
+fastapi = "^0.110.0"
+uvicorn = "^0.27.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
