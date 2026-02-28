@@ -1,35 +1,6 @@
 Architecture v1:
 
 ai-agent-mcp-server/
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── config.py
-│   │
-│   ├── agent/
-│   │   ├── __init__.py
-│   │   ├── agent.py
-│   │   ├── memory.py
-│   │   └── planner.py
-│   │
-│   ├── tools/
-│   │   ├── __init__.py
-│   │   ├── base.py
-│   │   ├── file_tool.py
-│   │   └── math_tool.py
-│   │
-│   └── api/
-│       ├── __init__.py
-│       └── routes.py
-│
-├── tests/
-│   └── __init__.py
-│
-├── .gitignore
-└── README.md
-
-aws-study-agent/
-│
 ├── main.py                # FastAPI bootstrap, API endpoint
 ├── agent.py               # Agent logika (Planner + Tool orchestration)
 ├── planner.py             # Planner, ami lépésekre bontja a feladatot
@@ -46,5 +17,8 @@ aws-study-agent/
 ├── requirements.txt
 └── README.md
 
+LLM interface
+├── FakeLLM (tests, local)
+└── OpenAILLM (runtime)
 
 What is AI Agent
