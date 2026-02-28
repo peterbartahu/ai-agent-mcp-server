@@ -23,10 +23,15 @@ class OpenAILLM(LLM):
         )
         return response.choices[0].message.content
 
-    def generate_summary(self, topic: str) -> str:
+    def generate_summary(self, topic: str, context_docs: list[str] | None = None) -> str:
+
+        context_text = ""
+        if context_docs:
+            context_text = "\n\nRelevant documents:\n" + "\n".join(context_docs)
+
         return self._prompt(
-            "You are a study assistant.",
-            f"Give a concise summary of the topic: {topic}"
+            "You are a study assistant using provided context.",
+            f"Topic: {topic}\n{context_text}\n\nGive a concise summary."
         )
 
     def generate_key_points(self, topic: str) -> list[str]:
