@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 
-
 class Tool(ABC):
     name: str
     description: str
 
     @abstractmethod
-    def run(self, input_data: str) -> str:
+    def run(self, input_data: dict) -> dict:
         pass

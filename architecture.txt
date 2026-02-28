@@ -1,34 +1,24 @@
 Architecture v1:
 
 ai-agent-mcp-server/
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── config.py
-│   │
-│   ├── agent/
-│   │   ├── __init__.py
-│   │   ├── agent.py
-│   │   ├── memory.py
-│   │   └── planner.py
-│   │
-│   ├── tools/
-│   │   ├── __init__.py
-│   │   ├── base.py
-│   │   ├── file_tool.py
-│   │   └── math_tool.py
-│   │
-│   └── api/
-│       ├── __init__.py
-│       └── routes.py
-│
-├── tests/
-│   └── __init__.py
-│
-├── .gitignore
+├── main.py                # FastAPI bootstrap, API endpoint
+├── agent.py               # Agent logika (Planner + Tool orchestration)
+├── planner.py             # Planner, ami lépésekre bontja a feladatot
+├── tools/
+│   ├── base.py            # Tool interface
+│   ├── question_generator.py
+│   ├── summary_generator.py
+│   ├── answer_provider.py
+│   └── pdf_exporter.py
+├── models/
+│   └── schemas.py         # Pydantic request/response modellek
+├── utils/
+│   └── text_chunking.py   # Chunking helper, opcionális
+├── requirements.txt
 └── README.md
 
-
-
+LLM interface
+├── FakeLLM (tests, local)
+└── OpenAILLM (runtime)
 
 What is AI Agent

@@ -1,25 +1,27 @@
 from app.agent.agent import Agent
-from app.tools.base import Tool
+from app.agent.planner import Planner
+from app.agent.llm import FakeLLM
+from app.tools.summary_tool import SummaryTool
+from app.tools.question_tool import QuestionTool
+from app.tools.answer_tool import AnswerTool
 
+def test_agent_runs_full_flow():
+    llm = FakeLLM()
 
-class DummyTool(Tool):
-    name = "dummy"
-    description = "Dummy tool for testing"
+    tools = {
+        "summary": SummaryTool(llm),
+        "questions": QuestionTool(llm),
+        "answers": AnswerTool(llm),
+    }
 
-    def run(self, input_data: str) -> str:
-        return "dummy-result"
+    agent = Agent(
+        planner=Planner(),
+        tools=tools
+    )
 
+    result = agent.handle_task("AWS S3")
 
-def test_agent_executes_matching_tool():
-    agent = Agent(tools=[DummyTool()])
-
-    result = agent.handle_task("please use dummy tool")
-
-    assert result == "dummy-result"
-
-def test_agent_returns_message_when_no_tool_matches():
-    agent = Agent(tools=[DummyTool()])
-
-    result = agent.handle_task("do something else")
-
-    assert result == "No suitable tool found for task"
+    assert "summary" in result
+    assert "key_points" in result
+    assert "questions" in result
+    assert "answers" in result
