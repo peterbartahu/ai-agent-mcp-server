@@ -28,7 +28,11 @@ This project implements an **MCP-inspired agent architecture** with **tool-based
 
 ---
 
+## .env file configuration
 
+- `USE_OPENAI`=true/false (true if you use, false if you use fake llm)
+- `OPENAI_API_KEY`=sk-xxxxxxxx (API key)
+- `OPENAI_MODEL`=xyz (example model: gpt-3.5-turbo)
 
 ## Requirements
 ```bash
