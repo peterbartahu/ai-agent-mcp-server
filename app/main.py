@@ -8,6 +8,7 @@ from app.agent.llm_openai import OpenAILLM
 from app.tools.summary_tool import SummaryTool
 from app.tools.question_tool import QuestionTool
 from app.tools.answer_tool import AnswerTool
+from app.export.pdf_exporter import PDFExporter
 
 from dotenv import load_dotenv
 
@@ -47,20 +48,26 @@ def main():
         tools=tools
     )
 
-    result = agent.handle_task(topic)
+    material = agent.handle_task(topic)
 
     print("\n=== SUMMARY ===")
-    print(result["summary"])
+    print(material.summary)
 
     print("\n=== KEY POINTS ===")
-    for kp in result["key_points"]:
+    for kp in material.key_points:
         print(f"- {kp}")
 
     print("\n=== QUESTIONS & ANSWERS ===")
-    for q, a in zip(result["questions"], result["answers"]):
+    for q, a in zip(material.questions, material.answers):
         print(f"\nQ: {q}")
         print(f"A: {a}")
 
+    # PDF export
+    export_pdf = input("\nExport PDF? (y/n): ").strip().lower()
+    if export_pdf == "y":
+        filename = f"{topic.replace(' ', '_')}.pdf"
+        PDFExporter.export(material, filename)
+        print(f"PDF saved as {filename}")
 
 if __name__ == "__main__":
     main()
