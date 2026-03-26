@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Helper - Generate Study Materials</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #dc2626;        /* Red */
+            --secondary-color: #991b1b;      /* Dark Red */
+            --bg-dark: #0f0f0f;              /* Almost Black */
+            --bg-card: #1a1a1a;              /* Dark Gray */
+            --text-primary: #ffffff;         /* White */
+            --text-secondary: #e5e7eb;       /* Light Gray */
+            --border-color: #404040;         /* Gray */
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .navbar-custom {
+            background: var(--bg-card);
+            box-shadow: 0 2px 10px rgba(220, 38, 38, 0.2);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+
+        .container-main {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 12px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            box-shadow: 0 8px 24px rgba(220, 38, 38, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            height: 100%;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(220, 38, 38, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-color);
+            color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.5);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-control-custom {
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .badge-custom {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .list-item {
+            background: var(--bg-card);
+            border-left: 4px solid var(--primary-color);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .list-item:hover {
+            background: rgba(220, 38, 38, 0.05);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(220, 38, 38, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert-custom {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            margin-bottom: 20px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .alert-custom.alert-danger {
+            border-color: var(--danger-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .alert-custom.alert-success {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .alert-custom.alert-warning {
+            border-color: var(--warning-color);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .alert-custom.alert-info {
+            border-color: var(--primary-color);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .tab-content {
+            background: var(--bg-card);
+            border-radius: 0 0 12px 12px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            color: var(--text-primary);
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--text-secondary);
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background: transparent;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            opacity: 0.5;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+        }
+
+        .result-card {
+            background: rgba(220, 38, 38, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .result-card h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .result-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .result-card ul, .result-card ol {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .highlight {
+            background: rgba(220, 38, 38, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .form-label {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .input-group .btn-primary-custom {
+            color: white;
+        }
+
+        small {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .container-main {
+                padding: 0 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-book-fill"></i> AI Study Helper
+            </a>
+            <span class="navbar-text ms-auto" style="color: var(--text-secondary);">
+                <small>Generate study materials instantly</small>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-main mt-5">
+        <!-- Alerts -->
+        <div id="alertContainer"></div>
+
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs mb-0" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="generate-tab" data-bs-toggle="tab" data-bs-target="#generate-content" type="button" role="tab">
+                    <i class="bi bi-sparkles"></i> Generate Study
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials-content" type="button" role="tab">
+                    <i class="bi bi-collection"></i> Saved Materials
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="search-tab" data-bs-toggle="tab" data-bs-target="#search-content" type="button" role="tab">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Generate Tab -->
+            <div class="tab-pane fade show active" id="generate-content" role="tabpanel">
+                <div class="row mt-4">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card card-custom">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">
+                                    <i class="bi bi-lightning-fill text-warning"></i> Generate Study Material
+                                </h4>
+                                
+                                <div class="mb-3">
+                                    <label for="topic" class="form-label fw-600">Study Topic</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control form-control-custom" 
+                                        id="topic" 
+                                        placeholder="e.g., Machine Learning, AWS S3, Python Basics"
+                                        autocomplete="off"
+                                    >
+                                    <small style="color: var(--text-secondary);">Enter any topic you want to study</small>
+                                </div>
+
+                                <button 
+                                    class="btn btn-primary-custom w-100" 
+                                    id="generateBtn"
+                                    onclick="generateStudyMaterial()"
+                                >
+                                    <span id="btnText"><i class="bi bi-play-fill"></i> Generate Study Material</span>
+                                    <span id="btnSpinner" class="loading-spinner" style="display: none;"></span>
+                                </button>
+
+                                <div id="generateResult" class="mt-4" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials Tab -->
+            <div class="tab-pane fade" id="materials-content" role="tabpanel">
+                <div class="row mt-4">
+                    <div class="col-lg-10 mx-auto">
+                        <h4 class="mb-4"><i class="bi bi-file-earmark-text"></i> Your Saved Materials</h4>
+                        <div id="materialsList" class="mb-4"></div>
+                        <button 
+                            class="btn btn-primary-custom mb-4" 
+                            onclick="loadMaterials()"
+                        >
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Tab -->
+            <div class="tab-pane fade" id="search-content" role="tabpanel">
+                <div class="row mt-4">
+                    <div class="col-lg-10 mx-auto">
+                        <h4 class="mb-4"><i class="bi bi-search"></i> Search Materials</h4>
+                        
+                        <div class="mb-3">
+                            <label for="searchInput" class="form-label fw-600">Search Query</label>
+                            <div class="input-group">
+                                <input 
+                                    type="text" 
+                                    class="form-control form-control-custom" 
+                                    id="searchInput" 
+                                    placeholder="e.g., AWS, Python, Database"
+                                    autocomplete="off"
+                                >
+                                <button 
+                                    class="btn btn-primary-custom" 
+                                    type="button"
+                                    onclick="searchMaterials()"
+                                >
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+                            <small style="color: var(--text-secondary);">Search is case-insensitive and supports partial matches</small>
+                        </div>
+
+                        <div id="searchResults" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- API Functions -->
+    <script>
+        const API_BASE = '/';
+
+        // Show Alert
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-custom alert-${type === 'error' ? 'danger' : type}`;
+            alertDiv.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} me-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            const container = document.getElementById('alertContainer');
+            container.innerHTML = '';
+            container.appendChild(alertDiv);
+
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+
+        // Generate Study Material
+        async function generateStudyMaterial() {
+            const topic = document.getElementById('topic').value.trim();
+
+            if (!topic) {
+                showAlert('Please enter a topic', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            btnSpinner.style.display = 'inline-block';
+
+            try {
+                const response = await fetch(API_BASE + 'study', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic })
+                });
+
+                if (!response.ok) throw new Error('Failed to generate study material');
+
+                const data = await response.json();
+                displayStudyResult(data, topic);
+                showAlert(`✅ Study material generated for "${topic}"`, 'success');
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btnText.style.display = 'inline';
+                btnSpinner.style.display = 'none';
+            }
+        }
+
+        // Display Study Result
+        function displayStudyResult(data, topic) {
+            const resultDiv = document.getElementById('generateResult');
+            
+            const summaryPoints = data.key_points
+                .map(point => `<li>${point}</li>`)
+                .join('');
+
+            const questionsAnswers = data.questions
+                .map((q, i) => `
+                    <div class="result-card">
+                        <h6 class="mb-3"><i class="bi bi-question-circle"></i> ${q}</h6>
+                        <p class="mb-0">${data.answers[i]}</p>
+                    </div>
+                `)
+                .join('');
+
+            resultDiv.innerHTML = `
+                <div class="result-card">
+                    <h5><i class="bi bi-file-earmark-text"></i> Summary</h5>
+                    <p>${data.summary}</p>
+                </div>
+
+                <div class="result-card">
+                    <h5><i class="bi bi-list-check"></i> Key Points</h5>
+                    <ul class="mb-0">
+                        ${summaryPoints}
+                    </ul>
+                </div>
+
+                <h5 class="mt-4 mb-3"><i class="bi bi-chat-left-text"></i> Questions & Answers</h5>
+                ${questionsAnswers}
+
+                <div class="mt-4">
+                    <button class="btn btn-outline-primary" onclick="copyToClipboard()">
+                        <i class="bi bi-clipboard"></i> Copy All
+                    </button>
+                </div>
+            `;
+            resultDiv.style.display = 'block';
+        }
+
+        // Load Materials
+        async function loadMaterials() {
+            const container = document.getElementById('materialsList');
+            container.innerHTML = '<div class="text-center"><div class="loading-spinner"></div></div>';
+
+            try {
+                const response = await fetch(API_BASE + 'interactions');
+                if (!response.ok) throw new Error('Failed to load materials');
+
+                const materials = await response.json();
+
+                if (materials.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="bi bi-inbox"></i>
+                            <p>No study materials yet</p>
+                            <small>Generate your first study material using the "Generate Study" tab</small>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = materials
+                    .map(m => `
+                        <div class="list-item" onclick="viewMaterial('${m.topic.replace(/'/g, "\\'")}')">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">${m.topic}</h6>
+                                    <small style="color: var(--text-secondary);">
+                                        <i class="bi bi-calendar3"></i> ${new Date(m.created_at).toLocaleDateString()}
+                                    </small>
+                                </div>
+                                <i class="bi bi-arrow-right text-primary"></i>
+                            </div>
+                        </div>
+                    `)
+                    .join('');
+            } catch (error) {
+                showAlert('Error loading materials: ' + error.message, 'error');
+            }
+        }
+
+        // View Material
+        async function viewMaterial(topic) {
+            try {
+                const response = await fetch(API_BASE + `interactions/${encodeURIComponent(topic)}`);
+                if (!response.ok) throw new Error('Failed to load material');
+
+                const data = await response.json();
+                displayStudyResult(data, topic);
+
+                // Switch to generate tab to show result
+                document.getElementById('generate-tab').click();
+            } catch (error) {
+                showAlert('Error loading material: ' + error.message, 'error');
+            }
+        }
+
+        // Search Materials
+        async function searchMaterials() {
+            const query = document.getElementById('searchInput').value.trim();
+
+            if (!query) {
+                showAlert('Please enter a search query', 'warning');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<div class="text-center"><div class="loading-spinner"></div></div>';
+
+            try {
+                const response = await fetch(API_BASE + `interactions/search?q=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Search failed');
+
+                const results = await response.json();
+
+                if (results.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="empty-state">
+                            <i class="bi bi-search"></i>
+                            <p>No results found for "<span class="highlight">${query}</span>"</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                resultsDiv.innerHTML = `
+                    <p class="mb-3" style="color: var(--text-secondary);">Found <span class="highlight">${results.length}</span> result(s)</p>
+                    ${results
+                        .map(r => `
+                            <div class="list-item" onclick="viewMaterial('${r.topic.replace(/'/g, "\\'")}')">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">${r.topic}</h6>
+                                        <small style="color: var(--text-secondary);">
+                                            <i class="bi bi-calendar3"></i> ${new Date(r.created_at).toLocaleDateString()}
+                                        </small>
+                                    </div>
+                                    <i class="bi bi-arrow-right text-primary"></i>
+                                </div>
+                            </div>
+                        `)
+                        .join('')}
+                `;
+            } catch (error) {
+                showAlert('Error searching: ' + error.message, 'error');
+            }
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard() {
+            const resultDiv = document.getElementById('generateResult');
+            const text = resultDiv.innerText;
+            navigator.clipboard.writeText(text);
+            showAlert('Copied to clipboard!', 'success');
+        }
+
+        // Load materials on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('materials-tab').addEventListener('click', loadMaterials);
+        });
+
+        // Enter key for search
+        document.getElementById('searchInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchMaterials();
+        });
+
+        // Enter key for topic
+        document.getElementById('topic')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') generateStudyMaterial();
+        });
+    </script>
+</body>
+</html>
